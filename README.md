@@ -11,10 +11,10 @@
 ### Objective
 To create the bot which will automate the actions of users on the dating platform called Tinder. Gender to simulate the behaviour of is male.
 What to automate:
-  [ ] Decisions on whether the girl is good looking or not
-  [ ] Left-right swipe based on the previous decision
-  [ ] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
-  [ ] [BONUS] make notifications on matches and dialogues to the user in Telegram
+  - [ ] Decisions on whether the girl is good looking or not
+  - [ ] Left-right swipe based on the previous decision
+  - [ ] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
+  - [ ] [BONUS] make notifications on matches and dialogues to the user in Telegram
   
 ### Usage of the bot
 The main audience of the bot are males who use Tinder and don’t want to spend time on swiping and starting the conversation. The slogan of the bot is
