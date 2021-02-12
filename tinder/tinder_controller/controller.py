@@ -1,13 +1,20 @@
+import os
+import urllib.request
 from time import sleep
 from selenium import webdriver
 
 from tinder.decision_making import Decision, make_decision
 
 
+class OutOfSwipes(Exception):
+    """Exception for situation when daily limit of swipes is exceeded"""
+
+
 class TinderController:
     def __init__(self):
         self.driver = webdriver.Chrome()
         self.driver.get('https://tinder.com')
+        self.image_counter = 0
         print('Please login into your account')
 
     def like(self):
@@ -59,12 +66,22 @@ class TinderController:
             except Exception:
                 self.close_match()
 
-    def extract_picture(self):
+    def extract_picture(self, mode='swipe'):
         """
         Exctracts current picture on the page
         """
-        pic_element = self.driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[1]/span[1]/div/@style')
-        # pic_element.
+        try:
+            pic_element = self.driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[1]/span[1]/div')
+        except Exception:
+            raise OutOfSwipes from None
+        else:
+            background_image = pic_element.get_attribute('style').split('; ')[0]
+            start = background_image.find('"') + 1
+            end = background_image.rfind('"')
+            url = background_image[start:end]
+            _, img_extension = os.path.splitext(url)
+            urllib.request.urlretrieve(url, str(self.image_counter) + img_extension)
+            self.image_counter += 1
 
     def swipe(self):
         """
@@ -80,7 +97,11 @@ class TinderController:
         """
         while True:
             sleep(0.5)
-            self.swipe()
+            try:
+                self.swipe()
+            except OutOfSwipes:
+                print('Seems we have reached a daily limit of swipes :(')
+                break
 
     def start_dataset_collecting(self):
         """
