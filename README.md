@@ -15,7 +15,7 @@ What to automate:
     - [ ] Collect dataset of girls' pictures
     - [ ] Label data on 'like-dislike' targets with special expert (Danis Begishev)
     - [ ] Train CNN to classify photos
-  - [ ] Left-right swipe based on the previous decision
+  - [x] Left-right swipe based on the previous decision
   - [ ] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
   - [ ] [BONUS] make notifications on matches and dialogues to the user in Telegram
   
@@ -34,4 +34,13 @@ As a metric of quality of bot’s actions we can look at the mean length of dial
 
 ### Human expertise
 In the context of dialogues human expertise is always applicable, so we can always estimate the quality of conversations just by simply looking at it.
+
+### How to run
+1. Create virtualenv, activate it and install given requirements
+
+- python3 -m venv venv
+- . venv/bin/activate
+- pip install -r requirements.txt
+
+2. Download chrome-webdriver from [ChromeDriver](https://chromedriver.chromium.org/downloads)
 
