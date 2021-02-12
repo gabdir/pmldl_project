@@ -42,5 +42,5 @@ In the context of dialogues human expertise is always applicable, so we can alwa
 - . venv/bin/activate
 - pip install -r requirements.txt
 
-2. Download chrome-webdriver from [ChromeDriver](https://chromedriver.chromium.org/downloads)
+2. Download [ChromeWebDriver](https://chromedriver.chromium.org/downloads) and locate **chromedriver** in /usr/local/bin
 
