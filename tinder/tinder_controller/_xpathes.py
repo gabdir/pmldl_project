@@ -1,0 +1,2 @@
+LIKE_BTN_XPATH = '//*[@id="t-339552546"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div[2]/div[4]/button'
+DISLIKE_BTN_XPATH = '//*[@id="t-339552546"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div[2]/div[2]/button'

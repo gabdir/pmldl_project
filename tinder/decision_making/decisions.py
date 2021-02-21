@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class Decision(Enum):
+class Decision(IntEnum):
     """
     There are possible two decisions by our bot
     """
