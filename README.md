@@ -12,8 +12,7 @@
 To create the bot which will automate the actions of users on the dating platform called Tinder. Gender to simulate the behaviour of is male.
 What to automate:
   - [ ] Decisions on whether the girl is good looking or not
-    - [ ] Collect dataset of girls' pictures
-    - [ ] Label data on 'like-dislike' targets with special expert (Danis Begishev)
+    - [ ] Collect the dataset of girls' pictures and label data on 'like-dislike' targets (Started)
     - [ ] Train CNN to classify photos
   - [x] Left-right swipe based on the previous decision
   - [ ] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
