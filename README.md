@@ -37,13 +37,21 @@ In the context of dialogues human expertise is always applicable, so we can alwa
 ### How to run
 1. Create virtualenv, activate it and install given requirements
 
-- python3 -m venv venv
-- . venv/bin/activate
-- pip install -r requirements.txt
+```bash
+python3 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
 
 2. Download [ChromeWebDriver](https://chromedriver.chromium.org/downloads) and locate **chromedriver** in /usr/local/bin
 
 ### Dataset collection mode
-- python main.py -d
+```bash
+python main.py -d
+```
+
 Also you can specify folder where to store pictures, by default it is 'dataset' folder. To specify folder use '--folder' argument:
-- python main.py -d --folder my_folder
+
+```bash
+python main.py -d --folder my_folder
+```
