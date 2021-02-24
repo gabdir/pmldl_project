@@ -46,11 +46,13 @@ pip install -r requirements.txt
 2. Download [ChromeWebDriver](https://chromedriver.chromium.org/downloads) and locate **chromedriver** in /usr/local/bin
 
 ### Dataset collection mode
+To collect data use:
+
 ```bash
 python main.py -d
 ```
 
-Also you can specify folder where to store pictures, by default it is 'dataset' folder. To specify folder use '--folder' argument:
+Also you can specify folder where to store pictures, by default it is <b>dataset</b> folder. To specify folder use <b>--folder</b> argument:
 
 ```bash
 python main.py -d --folder my_folder
