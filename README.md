@@ -43,3 +43,7 @@ In the context of dialogues human expertise is always applicable, so we can alwa
 
 2. Download [ChromeWebDriver](https://chromedriver.chromium.org/downloads) and locate **chromedriver** in /usr/local/bin
 
+### Dataset collection mode
+- python main.py -d
+Also you can specify folder where to store pictures, by default it is 'dataset' folder. To specify folder use '--folder' argument:
+- python main.py -d --folder my_folder
