@@ -57,3 +57,5 @@ Also you can specify folder where to store pictures, by default it is <b>dataset
 ```bash
 python main.py -d --folder my_folder
 ```
+
+To make swipes use provided <b>prompt</b> on your terminal screen. If you swipe right in the simulated browser, the photos will not be saved.
