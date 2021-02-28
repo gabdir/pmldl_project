@@ -156,3 +156,5 @@ fabric.properties
 
 # VSCode shit
 .vscode/
+
+.DS_Store
