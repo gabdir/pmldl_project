@@ -5,6 +5,7 @@ import threading
 import requests
 from time import sleep
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from pathlib import Path
 
@@ -39,32 +40,11 @@ class TinderController:
 
     def close_popup(self):
         """
-        Sometimes after swipe there can be the suggestion on upgrading
+        Sometimes after swipe there can be the suggestion on upgrading, matches and other popups
 
-        Finds 'NO THANKS' button and clicks on it to return to photos swiping
+        Closes any popup by clicking ESC key on the keyboard
         """
-        try:
-            span_no_thanks = self.driver.find_element_by_xpath("//span[text()='No Thanks']")
-        except NoSuchElementException:
-            try:
-                span_not_interested = self.driver.find_element_by_xpath("//span[text()='Not interested']")
-            except NoSuchElementException:
-                raise NoSuchElementException
-            else:
-                not_interested_btn = span_not_interested.find_element_by_xpath('..')
-                not_interested_btn.click()
-        else:
-            no_thanks_btn = span_no_thanks.find_element_by_xpath('..')
-            no_thanks_btn.click()
-
-    def close_match(self):
-        """
-        Sometimes after swipe there can happen a match
-
-        Finds button 'CLOSE' and clicks on it to return to photos swiping
-        """
-        match_btn = self.driver.find_element_by_css_selector("button[title='Back to Tinder']")
-        match_btn.click()
+        webdriver.ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
 
     def action(self, act):
         """
@@ -78,10 +58,8 @@ class TinderController:
             else:
                 print('Unknown action')
         except NoSuchElementException:
-            try:
-                self.close_popup()
-            except NoSuchElementException:
-                self.close_match()
+            self.close_popup()
+
         except ElementClickInterceptedException:
             raise OutOfSwipes from None
 
@@ -100,7 +78,7 @@ class TinderController:
 
         path_to_save = folder / (url_hash + img_extension)
         while os.path.isfile(path_to_save):
-            url_hash += random.randint(0, 9)
+            url_hash += str(random.randint(0, 9))
             path_to_save = folder / (url_hash + img_extension)
 
         return url, path_to_save
@@ -144,12 +122,14 @@ class TinderController:
         Entry point for a controller to start data collection process
         """
 
-        def collect(folder, action):
-            try:
-                url, path_to_save = self.extract_picture_link(folder)
-            except NoSuchElementException:
-                print('WTF are you swiping, I cannot even see a picture')
-                return
+        def collect(action, folder):
+            if folder != '/':
+                try:
+                    url, path_to_save = self.extract_picture_link(folder)
+                except NoSuchElementException:
+                    print('WTF are you swiping, I cannot even see a picture')
+                    return
+                threading.Thread(target=self.save_picture, args=(url, path_to_save)).start()
 
             try:
                 action()
@@ -157,20 +137,19 @@ class TinderController:
                 print('WTF are you doing, I cannot see buttons')
                 return
 
-            threading.Thread(target=self.save_picture, args=(url, path_to_save)).start()
-
         def prompt():
             """
             Helper function to process input from the user
             """
-            prompt_string = f'Like({int(Decision.LIKE)}) or Dislike({int(Decision.DISLIKE)}): '
+            prompt_string = f'Like({int(Decision.LIKE)}), Dislike({int(Decision.DISLIKE)}) or ' \
+                            f'Close popup({int(Decision.CLOSE_POPUP)}): '
 
             try:
                 input_ = int(input(prompt_string))
             except ValueError:
                 input_ = None
             
-            while not (input_ == Decision.LIKE or input_ == Decision.DISLIKE):
+            while not (input_ == Decision.LIKE or input_ == Decision.DISLIKE or input_ == Decision.CLOSE_POPUP):
                 try:
                     input_ = int(input(prompt_string))
                 except ValueError:
@@ -204,7 +183,10 @@ class TinderController:
         while True:
             input_ = prompt()
             if input_ == Decision.LIKE:
-                args = (liked_folder, self.like)
-            else:
-                args = (disliked_folder, self.dislike)
+                args = (self.like, liked_folder)
+            elif input_ == Decision.DISLIKE:
+                args = (self.dislike, disliked_folder)
+            elif input_ == Decision.CLOSE_POPUP:
+                args = (self.close_popup, '/')
+
             collect(*args)
