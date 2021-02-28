@@ -10,9 +10,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     controller = TinderController()
-    print(args)
-    # if args.d:
-    controller.start_dataset_collecting(args.f)
-    # else:
-    #     # auto-mode
-    #     pass
+    if args.d:
+        controller.start_dataset_collecting(args.f)
+    else:
+        # auto-mode
+        pass
