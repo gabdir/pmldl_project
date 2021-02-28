@@ -42,16 +42,22 @@ class TinderController:
         Finds 'NO THANKS' button and clicks on it to return to photos swiping
         """
         try:
-            no_thanks_btn = self.driver.find_element_by_xpath('//*[@id="modal-manager"]/div/div/button[2]')
+            no_thanks_btn_xpath = '//*[@role="dialog"]/button[2]/span'
+            # no_thanks_btn = self.driver.find_element_by_xpath('//*[@id="modal-manager"]/div/div/button[2]')
+            no_thanks_btn = self.driver.find_element_by_xpath(no_thanks_btn_xpath)
+            no_thanks_btn.click()
         except NoSuchElementException:
             try:
-                not_interested_btn = self.driver.find_element_by_xpath('//*[@id="modal-manager"]/div/div/div[2]/button[2]')
+                not_interested_xpath = '//*[@role="dialog"]/div[2]/button[2]/span'
+                # not_interested_btn = self.driver.find_element_by_xpath('//*[@id="modal-manager"]/div/div/div[2]/button[2]')
+                not_interested_btn = self.driver.find_element_by_xpath(not_interested_xpath)
+                not_interested_btn.click()
             except NoSuchElementException:
                 raise NoSuchElementException
-            else:
-                not_interested_btn.click()
-        else:
-            no_thanks_btn.click()
+            # else:
+            #     not_interested_btn.click()
+        # else:
+        #     no_thanks_btn.click()
 
     def close_match(self):
         """
@@ -92,7 +98,7 @@ class TinderController:
         url_hash = hashlib.md5(url.encode()).hexdigest()[-5:]
         path_to_save = folder / (url_hash + img_extension)
         while os.path.isfile(path_to_save):
-            url_hash += random.randint(0, 9)
+            url_hash += str(random.randint(0, 9))
             path_to_save = folder / (url_hash + img_extension)
         urllib.request.urlretrieve(url, path_to_save)
 
@@ -101,6 +107,7 @@ class TinderController:
         Exctracts current picture on the page
         """
         try:
+
             pic_element = self.driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[1]/span[1]/div')
         except Exception:
             raise OutOfSwipes from None
@@ -141,7 +148,7 @@ class TinderController:
             """
             Helper function to process input from the user
             """
-            prompt_string = f'Like({int(Decision.LIKE)}) or Dislike({int(Decision.DISLIKE)}): '
+            prompt_string = f'Like({int(Decision.LIKE)}), Dislike({int(Decision.DISLIKE)}), Close Popup(3) or Close Match(4) : '
 
             try:
                 input_ = int(input(prompt_string))
@@ -177,3 +184,7 @@ class TinderController:
             elif input_ == Decision.DISLIKE:
                 self.save_picture(disliked_folder)
                 self.dislike()
+            elif input_ == Decision.CLOSE_POPUP:
+                self.close_popup()
+            elif input_ == Decision.CLOSE_MATCH:
+                self.close_match()

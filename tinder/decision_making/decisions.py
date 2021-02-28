@@ -8,6 +8,8 @@ class Decision(IntEnum):
 
     LIKE = 1
     DISLIKE = 2
+    CLOSE_POPUP = 3
+    CLOSE_MATCH = 4
 
 
 def make_decision(picture):
