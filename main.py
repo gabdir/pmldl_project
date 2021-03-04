@@ -2,6 +2,7 @@ import argparse
 
 from tinder.tinder_controller import TinderController
 from tinder.conversations.app import app
+from tinder.decision_making.model import Model
 
 
 if __name__ == '__main__':
@@ -16,4 +17,7 @@ if __name__ == '__main__':
     # else:
     #     # auto-mode
     #     pass
-    app.run()
+    # # app.run()
+    model = Model()
+    model.split_data('dataset')
+    model.define_model()
