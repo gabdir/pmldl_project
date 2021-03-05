@@ -13,8 +13,7 @@ selenium==3.141.0
 six==1.15.0
 urllib3==1.26.3
 flask==1.1.2
-transformers==2.8.0
-torch==1.4.0
+Cython==0.29.22
 tensorflow==2.4.1
 scikit-image==0.17.2
 scikit-learn=0.24.1
