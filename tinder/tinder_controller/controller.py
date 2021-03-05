@@ -8,6 +8,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from pathlib import Path
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 from tinder.decision_making import Decision, make_decision
 
@@ -46,6 +49,36 @@ class TinderController:
         """
         webdriver.ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
 
+    def log_in(self, email, password):
+        log_in_span = self.driver.find_element_by_xpath("//span[text()='Log in']")
+        log_in_button = log_in_span.find_element_by_xpath('..')
+        log_in_button.click()
+        driverWait = WebDriverWait(self.driver, 5)
+        driverWait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "//span[text()='Log in with Google']")))
+
+        # self.driver = self.driver.switch_to.active_element
+        try:
+            more_options = self.driver.find_element_by_xpath("//button[text()='More options']")
+            more_options.click()
+        except NoSuchElementException():
+            pass
+
+        facebook_span = self.driver.find_element_by_xpath("//span[text()='Log in with Facebook']")
+        facebook_button = facebook_span.find_element_by_xpath("..")
+        facebook_button.click()
+        email_input = self.driver.find_element_by_xpath("//input[@id='email']")
+        email_input.send_keys(email)
+        password_input = self.driver.find_element_by_xpath("//input[@id='pass']")
+        password_input.send_keys(password)
+        input_log_in = self.driver.find_element_by_xpath("//input[@name='login']")
+        input_log_in.click()
+        allow_span = self.driver.find_element_by_xpath("//span[text()='Allow']")
+        allow_button = allow_span.find_element_by_xpath("..")
+        allow_button.click()
+        not_interested_span = self.driver.find_element_by_xpath("//span[text()='Not interested']")
+        not_interested_button = not_interested_span.find_element_by_xpath("..")
+        not_interested_button.click()
+
     def action(self, act):
         """
         Makes action based on given decision
@@ -62,6 +95,16 @@ class TinderController:
 
         except ElementClickInterceptedException:
             raise OutOfSwipes from None
+
+    def extract_picture(self):
+        PIC_SELECTOR = "div[class$='StretchedBox'][style^='background-image']"
+        pic_element = self.driver.find_elements_by_css_selector(PIC_SELECTOR)[1]
+        background_image = pic_element.get_attribute('style').split('; ')[0]
+        start = background_image.find('"') + 1
+        end = background_image.rfind('"')
+        url = background_image[start:end]
+
+        return url
 
     def extract_picture_link(self, folder: Path):
         """
@@ -102,8 +145,8 @@ class TinderController:
         """
         Encapsulates logic for one swipe
         """
-        picture = self.extract_picture()
-        self.action(make_decision(picture))
+        picture_url = self.extract_picture()
+        self.action(make_decision(picture_url))
 
     def start_swiping(self):
         """
@@ -170,6 +213,9 @@ class TinderController:
         disliked_folder.mkdir(parents=True, exist_ok=True)
 
         print('Waiting...')
+
+        # provide credentials
+        self.log_in()
 
         is_like_available = False
         while not is_like_available:

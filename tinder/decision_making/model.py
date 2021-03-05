@@ -1,28 +1,42 @@
 import numpy as np
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
 from tensorflow.keras.layers import Convolution2D, MaxPooling2D
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import optimizers
 from keras.utils import np_utils
 import cv2
+from skimage import io
 import os
-
 
 img_size = 640
 
+
+def process_image(image_path):
+    img = cv2.imread(image_path)
+    dim = (img_size, img_size)
+    resized_img = cv2.resize(img, dim, interpolation=cv2.INTER_LINEAR)
+    return resized_img
+
+
+def process_external_image(image_url):
+    pic = io.imread(image_url, plugin='matplotlib')
+    img = cv2.cvtColor(pic, cv2.COLOR_RGB2BGR)
+    dim = (img_size, img_size)
+    resized_img = cv2.resize(img, dim, interpolation=cv2.INTER_LINEAR)
+    image = np.expand_dims(resized_img, axis=0)
+    return image
+
+
+def get_model():
+    model = load_model('cnn_model.h5')
+    return model
+
+
 class Model:
     def __init__(self):
-        # self.dataset = dataset_path
         self.images = []
         self.labels = []
-
-    def process_image(self, image_path):
-        img = cv2.imread(image_path)
-        # gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        dim = (img_size, img_size)
-        resized_img = cv2.resize(img, dim, interpolation=cv2.INTER_LINEAR)
-        return resized_img
 
     def split_data(self, dataset_path):
         temp_images = []
@@ -31,12 +45,12 @@ class Model:
         disliked_folder_path = os.path.join(dataset_path, 'disliked')
 
         for file in os.listdir(liked_folder_path):
-            image = self.process_image(os.path.join(liked_folder_path, file))
+            image = process_image(os.path.join(liked_folder_path, file))
             temp_images.append(image)
             temp_labels.append(1)
 
         for file in os.listdir(disliked_folder_path):
-            image = self.process_image(os.path.join(disliked_folder_path, file))
+            image = process_image(os.path.join(disliked_folder_path, file))
             temp_images.append(image)
             temp_labels.append(0)
 
@@ -86,3 +100,6 @@ class Model:
 
         model.fit(X_train, Y_train,
                   batch_size=64, epochs=10, verbose=2)
+
+        model.save('cnn_model.h5')
+
