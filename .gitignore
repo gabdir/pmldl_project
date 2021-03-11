@@ -160,3 +160,8 @@ fabric.properties
 .vscode/
 
 .DS_Store
+
+.pylintrc
+.replit
+
+*.h5
