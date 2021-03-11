@@ -163,5 +163,3 @@ fabric.properties
 
 .pylintrc
 .replit
-
-*.h5
