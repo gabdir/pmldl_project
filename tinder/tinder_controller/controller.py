@@ -297,6 +297,8 @@ class TinderController:
                 print('Seems we have reached a daily limit of swipes :(')
                 break
 
+            i += 1
+
     def start_dataset_collecting(self, dataset_folder):
         """
         Entry point for a controller to start data collection process
