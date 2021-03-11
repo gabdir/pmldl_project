@@ -11,11 +11,11 @@
 ### Objective
 To create the bot which will automate the actions of users on the dating platform called Tinder. Gender to simulate the behaviour of is male.
 What to automate:
-  - [ ] Decisions on whether the girl is good looking or not
-    - [ ] Collect the dataset of girls' pictures and label data on 'like-dislike' targets (Started)
-    - [ ] Train CNN to classify photos
+  - [x] Decisions on whether the girl is good looking or not
+    - [x] Collect the dataset of girls' pictures and label data on 'like-dislike' targets
+    - [x] Train CNN to classify photos
   - [x] Left-right swipe based on the previous decision
-  - [ ] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
+  - [x] Handling of the matches: in case of match bot needs to start a conversation with a high probability of answer from the girl and try to support the dialogue for a long time
   - [ ] [BONUS] make notifications on matches and dialogues to the user in Telegram
   
 ### Usage of the bot
@@ -59,3 +59,12 @@ python main.py -d --folder my_folder
 ```
 
 To make swipes use provided <b>prompt</b> on your terminal screen. If you swipe right in the simulated browser, the photos will not be saved.
+
+### Autoswiping mode
+To run the bot in autonomous mode:
+
+```bash
+python main.py -m model.h5
+```
+
+<b>model.h5</b> is default path to the trained model, you can specify another path or not specify anything to use this one by default.
